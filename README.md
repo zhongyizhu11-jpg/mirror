@@ -1,8 +1,8 @@
-# 🚀 CCB的工具库 🚀
+# 🚀 CCB应用镜像源 🚀
 
 ### 🌟 关于这个镜像仓库 🌟
 
-这个仓库是储存CCB原创脚本以及多个实用脚本的**镜像和改良版**。我们创建它的主要目的是：
+这个仓库是储存CCB原创脚本以及多个实用脚本的**镜像和改良版**以及其他一些应用。我创建它的主要目的是：
 
 #### 对于CCB脚本
 
@@ -14,35 +14,48 @@
 -   **优化体验**：针对CN服务器的使用环境进行"特别优化"
 -   **修复 BUG**：修正原版脚本中可能存在的一些小问题
 -   **历史遗留**：原脚本作者可能已经废弃脚本
--   **保持纯净**：作为一份可靠的备份，防止在极端情况下,原脚本未来可能出现的意外“污染”
+-   **保持纯净**：作为一份可靠的备份，防止在极端情况下,原脚本未来可能出现的意外"污染"
 
 我们会对脚本进行持续的维护和改进，在此特别感谢原作者们的辛勤付出！
 
 ---
 
-### 🧰 工具箱里有啥？
+### 📁 目录结构
 
--   [`gost.sh`](#gostsh-你的全能网络隧道专家-🧙‍♂️) - 全能Gost网络隧道
--   [`leikwan_9929_route.sh`](#leikwan_9929_routesh-双线服务器路由魔术师-🎩) - 双线服务器路由（leikwan双网卡服务器专享）
--   [`net_tools.sh`](#net_toolssh-服务器性能一键优化-⚡️) - 服务器性能一键优化
+```
+src/
+├── original/          # CCB 原创脚本
+│   └── leikwan_9929_route.sh
+└── optimized/         # 优化改良脚本
+    ├── gost.sh
+    └── net_tools.sh
+```
 
 ---
 
-## `gost.sh` - 你的全能网络隧道专家 🧙‍♂️
+### 🧰 脚本列表
 
-> 本脚本 fork 自 [KANIKIG/Multi-EasyGost](https://github.com/KANIKIG/Multi-EasyGost)，并在此基础上进行了优化和修改。
+#### 🔥 CCB 原创脚本
 
-还在为复杂的网络隧道配置头疼？`gost` 本身就是个神器，这个脚本更是让神器用起来得心应手。
+-   [`leikwan_9929_route.sh`](#leikwan_9929_routesh---双线服务器路由魔术师) - 双线服务器路由（leikwan双网卡服务器专享）
 
-**用它能干啥？**
+#### ⚡ 优化改良脚本
 
--   **秒速安装/更新**: 一键All in one，放弃大脑
+-   [`gost.sh`](#gostsh---你的全能网络隧道专家) - 全能Gost网络隧道
+-   [`net_tools.sh`](#net_toolssh---服务器性能一键优化) - 服务器性能一键优化
 
 ---
 
 ## `leikwan_9929_route.sh` - 双线服务器路由魔术师 🎩
 
-如果你有台“双网卡路由”服务器（比如同时有 CN2 和 9929 线路），这个脚本就是为你量身定做的！再也不用手动敲 `ip route` 命令了。
+**🔖 CCB 原创脚本**
+
+如果你有台"双网卡路由"服务器（比如同时有 CN2 和 9929 线路），这个脚本就是为你量身定做的！再也不用手动敲 `ip route` 命令了。
+
+**🚁 一键梭哈命令**
+```bash
+wget -O leikwan_9929_route.sh https://github.com/chunkburst/mirror/raw/main/src/original/leikwan_9929_route.sh && chmod +x leikwan_9929_route.sh && ./leikwan_9929_route.sh
+```
 
 **用它能干啥？**
 
@@ -68,11 +81,34 @@
 
 ---
 
+## `gost.sh` - 你的全能网络隧道专家 🧙‍♂️
+
+**🔖 优化脚本** - 本脚本 fork 自 [KANIKIG/Multi-EasyGost](https://github.com/KANIKIG/Multi-EasyGost)，并在此基础上进行了优化和修改。
+
+还在为复杂的网络隧道配置头疼？`gost` 本身就是个神器，这个脚本更是让神器用起来得心应手。
+
+**🚁 一键梭哈命令**
+```bash
+wget -O gost.sh https://github.com/chunkburst/mirror/raw/main/src/optimized/gost.sh && chmod +x gost.sh && ./gost.sh
+```
+
+**用它能干啥？**
+
+-   **秒速安装/更新**: 一键All in one，放弃大脑
+-   **直接转发**: 普通 TCP/UDP 流量转发，简单直接。
+
+---
+
 ## `net_tools.sh` - 服务器性能一键优化 ⚡️
 
-> 本脚本源自 **NNC.SH** 的作品，我们对其进行了镜像和适配。
+**🔖 优化脚本** - 本脚本源自 **NNC.SH** 的作品，我们对其进行了镜像和适配。
 
-新开的服务器感觉网络卡卡的？用这个脚本给它打一针“鸡血”！集合了各种常用的 Linux 系统优化，让你的小鸡变雄鹰。
+新开的服务器感觉网络卡卡的？用这个脚本给它打一针"鸡血"！集合了各种常用的 Linux 系统优化，让你的小鸡变雄鹰。
+
+**🚁 一键梭哈命令**
+```bash
+wget -O net_tools.sh https://github.com/chunkburst/mirror/raw/main/src/optimized/net_tools.sh && chmod +x net_tools.sh && ./net_tools.sh
+```
 
 **用它能干啥？**
 

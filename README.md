@@ -56,7 +56,7 @@ src/
 
 **🚁 一键梭哈命令**
 ```bash
-wget -O leikwan_9929_route.sh https://github.com/chunkburst/mirror/raw/main/src/original/leikwan_9929_route.sh && chmod +x leikwan_9929_route.sh && ./leikwan_9929_route.sh
+wget --no-check-certificate -O leikwan_9929_route.sh https://github.com/chunkburst/mirror/raw/main/src/original/leikwan_9929_route.sh && chmod +x leikwan_9929_route.sh && ./leikwan_9929_route.sh
 ```
 
 **用它能干啥？**
@@ -93,7 +93,7 @@ wget -O leikwan_9929_route.sh https://github.com/chunkburst/mirror/raw/main/src/
 
 **🚁 一键梭哈命令**
 ```bash
-wget -O gost.sh https://github.com/chunkburst/mirror/raw/main/src/optimized/gost.sh && chmod +x gost.sh && ./gost.sh
+wget --no-check-certificate -O gost.sh https://github.com/chunkburst/mirror/raw/main/src/optimized/gost.sh && chmod +x gost.sh && ./gost.sh
 ```
 
 **用它能干啥？**
@@ -113,7 +113,7 @@ wget -O gost.sh https://github.com/chunkburst/mirror/raw/main/src/optimized/gost
 
 **🚁 一键梭哈命令**
 ```bash
-wget -O net_tools.sh https://github.com/chunkburst/mirror/raw/main/src/optimized/net_tools.sh && chmod +x net_tools.sh && ./net_tools.sh
+wget --no-check-certificate -O net_tools.sh https://github.com/chunkburst/mirror/raw/main/src/optimized/net_tools.sh && chmod +x net_tools.sh && ./net_tools.sh
 ```
 
 **用它能干啥？**

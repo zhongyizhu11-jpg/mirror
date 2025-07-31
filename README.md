@@ -37,16 +37,18 @@ src/
 
 #### 🔥 CCB 原创脚本
 
--   [`leikwan_9929_route.sh`](#leikwan_9929_routesh---双线服务器路由魔术师) - 双线服务器路由（leikwan双网卡服务器专享）
+-   [`leikwan_9929_route.sh`](#leikwan路由) - 双线服务器路由（leikwan双网卡服务器专享）
 
 #### ⚡ 优化改良脚本
 
--   [`gost.sh`](#gostsh---你的全能网络隧道专家) - 全能Gost网络隧道
--   [`net_tools.sh`](#net_toolssh---服务器性能一键优化) - 服务器性能一键优化
+-   [`gost.sh`](#gost隧道) - 全能Gost网络隧道
+-   [`net_tools.sh`](#系统优化) - 服务器性能一键优化
 
 ---
 
 ## `leikwan_9929_route.sh` - 双线服务器路由魔术师 🎩
+
+### leikwan路由
 
 **🔖 CCB 原创脚本**
 
@@ -83,6 +85,8 @@ wget -O leikwan_9929_route.sh https://github.com/chunkburst/mirror/raw/main/src/
 
 ## `gost.sh` - 你的全能网络隧道专家 🧙‍♂️
 
+### gost隧道
+
 **🔖 优化脚本** - 本脚本 fork 自 [KANIKIG/Multi-EasyGost](https://github.com/KANIKIG/Multi-EasyGost)，并在此基础上进行了优化和修改。
 
 还在为复杂的网络隧道配置头疼？`gost` 本身就是个神器，这个脚本更是让神器用起来得心应手。
@@ -100,6 +104,8 @@ wget -O gost.sh https://github.com/chunkburst/mirror/raw/main/src/optimized/gost
 ---
 
 ## `net_tools.sh` - 服务器性能一键优化 ⚡️
+
+### 系统优化
 
 **🔖 优化脚本** - 本脚本源自 **NNC.SH** 的作品，我们对其进行了镜像和适配。
 

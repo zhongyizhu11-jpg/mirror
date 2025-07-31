@@ -784,6 +784,11 @@ function show_all_conf() {
   echo -e "序号|方法\t    |本地端口\t|目的地地址:目的地端口"
   echo -e "--------------------------------------------------------"
 
+  if [[ ! -s "${raw_conf_path}" ]]; then
+    echo -e "\n          -- 当前没有配置任何转发规则 --\n"
+    echo -e "--------------------------------------------------------"
+    return
+  fi
   count_line=$(awk 'END{print NR}' $raw_conf_path)
   for ((i = 1; i <= $count_line; i++)); do
     trans_conf=$(sed -n "${i}p" $raw_conf_path)

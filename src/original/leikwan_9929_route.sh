@@ -435,7 +435,7 @@ main_menu() {
     while true; do
         clear
         echo -e "${YELLOW}==============================="
-        echo -e "[ 嘻嘻比双头龙口UI - 91VIP ]"
+        echo -e "[ 嘻嘻比双口UI ]"
         echo -e "===============================${NC}"
         echo "1) 添加目标 IP 路由"
         echo "2) 删除指定 IP 路由"

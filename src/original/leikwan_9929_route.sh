@@ -23,15 +23,15 @@
 
 # 具体情况（_SRC和_NET）以 ip addr show 命令运行出来的为准
 
-CN2_IF="eth1" #如果是ens19就写ens19
+CN2_IF="eth0" #如果是ens19就写ens19
 CN2_GW="10.8.0.1" #gateway(网关地址)
-CN2_SRC="10.8.0.*" #这里填你的eth1 / ens19的源IP 
-CN2_NET="10.8.0.0/22"  #这里填你的eth1 / ens19的网段(应该是/22)
+CN2_SRC="10.8.0.39" #这里填你的eth1 / ens19的源IP 
+CN2_NET="10.8.0.0/23"  #这里填你的eth1 / ens19的网段(应该是/22)
 
-NET9929_IF="eth0" #无需更改
+NET9929_IF="eth1" #无需更改
 NET9929_GW="10.7.0.1" #网关地址
-NET9929_SRC="10.7.1.*" #这里填你的eth0的源IP
-NET9929_NET="10.7.0.0/23" #这里填你的eth0的网段(一般应该大概是/23)
+NET9929_SRC="10.7.1.15" #这里填你的eth0的源IP
+NET9929_NET="10.7.0.0/22" #这里填你的eth0的网段(一般应该大概是/23)
 
 ROUTE_LIST="/etc/custom-routes.list"
 

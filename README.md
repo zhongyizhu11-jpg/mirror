@@ -56,7 +56,7 @@ src/
 
 **🚁 一键梭哈命令**
 ```bash
-wget --no-check-certificate -O leikwan_9929_route.sh https://github.com/chunkburst/mirror/raw/main/src/original/leikwan_9929_route.sh && chmod +x leikwan_9929_route.sh && ./leikwan_9929_route.sh
+wget --no-check-certificate -O leikwan_9929_route.sh https://github.com/zhongyizhu11-jpg/mirror/raw/main/src/original/leikwan_9929_route.sh && chmod +x leikwan_9929_route.sh && ./leikwan_9929_route.sh
 ```
 
 **用它能干啥？**

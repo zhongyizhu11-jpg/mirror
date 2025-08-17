@@ -1,20 +1,22 @@
 #!/bin/bash
 
 # 双出口路由管理脚本 - 支持 IPv4 / IPv6 / 出口测速 / 自动恢复 / 策略路由
-# 修改适配 eth0 为 CN2（策略表 200）、eth1 为 9929（策略表 201）
-# 保留原作者注释与结构，便于维护
+# 适配你当前 VPS 网卡：
+#   eth0 = CN2（电信出口，10.8.x.x）
+#   eth1 = 9929（联通出口，10.7.x.x）
 
-# ========== 接口与配置区域 ==========
+# Author: 自动化CCB (chunkburst / tg: @auto_ccb)
+# 改进版 by ChatGPT（适配网卡实际情况）
 
-# 具体情况（_SRC和_NET）以 ip addr show 命令运行出来的为准
-# （以下已按你机器实参填写）
-# CN2 出口（eth0）
+# ========== 配置区域 ==========
+
+# CN2 出口 (电信，实际在 eth0)
 CN2_IF="eth0"
 CN2_GW="10.8.0.1"
 CN2_SRC="10.8.0.39"
 CN2_NET="10.8.0.0/23"
 
-# 9929 出口（eth1）
+# 9929 出口 (联通，实际在 eth1)
 NET9929_IF="eth1"
 NET9929_GW="10.7.0.1"
 NET9929_SRC="10.7.1.15"
@@ -68,22 +70,16 @@ hide_ip() {
 # 自动安装bc模块
 install_bc() {
     if command -v apt-get &>/dev/null; then
-        # Debian/Ubuntu
         apt-get update >/dev/null 2>&1 && apt-get install -y bc >/dev/null 2>&1
     elif command -v yum &>/dev/null; then
-        # CentOS/RHEL 7
         yum install -y bc >/dev/null 2>&1
     elif command -v dnf &>/dev/null; then
-        # CentOS/RHEL 8+/Fedora
         dnf install -y bc >/dev/null 2>&1
     elif command -v zypper &>/dev/null; then
-        # openSUSE
         zypper install -y bc >/dev/null 2>&1
     elif command -v pacman &>/dev/null; then
-        # Arch Linux
         pacman -S --noconfirm bc >/dev/null 2>&1
     elif command -v apk &>/dev/null; then
-        # Alpine Linux
         apk add --no-cache bc >/dev/null 2>&1
     else
         return 1
@@ -101,7 +97,6 @@ get_exit_ip() {
         local URLS=("http://ip.sb" "https://ipv4.icanhazip.com")
     fi
 
-    # 重试机制：每个URL最多重试2次
     while [[ $RETRY_COUNT -le $MAX_RETRIES ]]; do
         for URL in "${URLS[@]}"; do
             local CURL_OPTS="-s --interface $IFACE_NAME --connect-timeout 10 --max-time 15"
@@ -135,7 +130,6 @@ test_single_exit() {
         PING_CMD="ping -6 -c 3 -I $IFACE"
     else
         TARGET_TYPE="ipv4"
-        # 对于 IPv4，-I 这里用源IP（你机器是具体IP，没用通配符）
         PING_CMD="ping -4 -c 3 -I $SRC"
     fi
 
@@ -177,7 +171,6 @@ run_speed_test() {
     fi
     echo -e "${YELLOW}[*] 正在测试目标: $TARGET${NC}"
     echo
-    # 9929（eth1）与 CN2（eth0）顺序与名称已对齐
     DELAY1=$(test_single_exit "9929（eth1）" "$NET9929_IF" "$NET9929_SRC" "$TARGET")
     DELAY2=$(test_single_exit "CN2（eth0）"  "$CN2_IF"     "$CN2_SRC"     "$TARGET")
     echo -e "${BLUE}推荐线路：${NC}"
@@ -242,21 +235,19 @@ add_route() {
         is_valid_ipv4 "$TARGET_IP" || { echo -e "${CYAN}[-] 非法的 IPv4 地址${NC}"; echo; read -p "按 Enter..."; return; }
     fi
     echo -e "${BLUE}[*] 请选择出口线路:${NC}"
-    echo "   1) 9929（联通，eth1）"
-    echo "   2) CN2（电信，eth0）"
+    echo "   1) 9929（联通）"
+    echo "   2) CN2（电信）"
     read -p ">> 请选择 [1-2]: " CHOICE
     sed -i "/^$TARGET_IP /d" "$ROUTE_LIST"
     if is_ipv6 "$TARGET_IP"; then
         case "$CHOICE" in
             1) ip -6 route replace "$TARGET_IP/128" dev "$NET9929_IF"; echo "$TARGET_IP via-9929-v6" >> "$ROUTE_LIST"; echo -e "${GREEN}[+] 已添加 IPv6 9929 路由${NC}" ;;
             2) ip -6 route replace "$TARGET_IP/128" dev "$CN2_IF"; echo "$TARGET_IP via-cn2-v6" >> "$ROUTE_LIST"; echo -e "${CYAN}[+] 已添加 IPv6 CN2 路由${NC}" ;;
-            *) echo -e "${CYAN}[-] 无效选择${NC}" ;;
         esac
     else
         case "$CHOICE" in
             1) ip route replace "$TARGET_IP/32" via "$NET9929_GW" dev "$NET9929_IF" src "$NET9929_SRC"; echo "$TARGET_IP via-9929" >> "$ROUTE_LIST"; echo -e "${GREEN}[+] 已添加 IPv4 9929 路由${NC}" ;;
             2) ip route replace "$TARGET_IP/32" via "$CN2_GW" dev "$CN2_IF" src "$CN2_SRC"; echo "$TARGET_IP via-cn2" >> "$ROUTE_LIST"; echo -e "${CYAN}[+] 已添加 IPv4 CN2 路由${NC}" ;;
-            *) echo -e "${CYAN}[-] 无效选择${NC}" ;;
         esac
     fi
     echo; read -p "按 Enter 键返回主菜单..."
@@ -324,7 +315,7 @@ restore_routes() {
     echo -e "${GREEN}[+] 路由恢复完成${NC}"; echo; read -p "按 Enter..."
 }
 
-# 清空所有路由（保留功能，不在主菜单显示）
+# 清空所有路由
 clear_all_routes() {
     echo -e "${YELLOW}[!] 警告：此操作将删除所有已配置的静态路由。${NC}"
     read -p "你确定要继续吗？[y/N]: " CONFIRM
@@ -358,23 +349,17 @@ EOF
     echo; read -p "按 Enter..."
 }
 
-# 配置策略路由（表号 200/201）
+# 配置策略路由
 setup_policy_routing() {
     echo -e "${BLUE}[*] 正在配置策略路由...${NC}"
-    # 绑定表号到表名（一次性）
-    grep -q "eth0_table" /etc/iproute2/rt_tables || echo "200 eth0_table" >> /etc/iproute2/rt_tables
-    grep -q "eth1_table" /etc/iproute2/rt_tables || echo "201 eth1_table" >> /etc/iproute2/rt_tables
-
-    # 为各表添加本地网段与默认路由
-    ip route show table eth0_table | grep -q "$CN2_NET"     || ip route add "$CN2_NET"     dev "$CN2_IF"     src "$CN2_SRC"     table eth0_table
-    ip route show table eth0_table | grep -q "default"      || ip route add default via "$CN2_GW"     dev "$CN2_IF"     table eth0_table
-    ip route show table eth1_table | grep -q "$NET9929_NET" || ip route add "$NET9929_NET" dev "$NET9929_IF" src "$NET9929_SRC" table eth1_table
-    ip route show table eth1_table | grep -q "default"      || ip route add default via "$NET9929_GW" dev "$NET9929_IF" table eth1_table
-
-    # 源地址策略（优先级 200/201）
-    ip rule show | grep -q "from $CN2_SRC"     || ip rule add from "$CN2_SRC"     table eth0_table priority 200
-    ip rule show | grep -q "from $NET9929_SRC" || ip rule add from "$NET9929_SRC" table eth1_table priority 201
-
+    grep -q "cn2_table" /etc/iproute2/rt_tables || echo "200 cn2_table" >> /etc/iproute2/rt_tables
+    grep -q "net9929_table" /etc/iproute2/rt_tables || echo "201 net9929_table" >> /etc/iproute2/rt_tables
+    ip route show table net9929_table | grep -q "$NET9929_NET" || ip route add "$NET9929_NET" dev "$NET9929_IF" src "$NET9929_SRC" table net9929_table
+    ip route show table net9929_table | grep -q "default" || ip route add default via "$NET9929_GW" dev "$NET9929_IF" table net9929_table
+    ip route show table cn2_table | grep -q "$CN2_NET" || ip route add "$CN2_NET" dev "$CN2_IF" src "$CN2_SRC" table cn2_table
+    ip route show table cn2_table | grep -q "default" || ip route add default via "$CN2_GW" dev "$CN2_IF" table cn2_table
+    ip rule show | grep -q "from $NET9929_SRC" || ip rule add from "$NET9929_SRC" table net9929_table priority 200
+    ip rule show | grep -q "from $CN2_SRC" || ip rule add from "$CN2_SRC" table cn2_table priority 201
     echo -e "${GREEN}[+] 策略路由配置/检查完成。${NC}"
 }
 
@@ -431,7 +416,7 @@ main_menu() {
     while true; do
         clear
         echo -e "${YELLOW}==============================="
-        echo -e "[ 嘻嘻比双口UI ]"
+        echo -e "[ 双出口路由管理 UI ]"
         echo -e "===============================${NC}"
         echo "1) 添加目标 IP 路由"
         echo "2) 删除指定 IP 路由"
